@@ -17,6 +17,9 @@
     "express": "^4.12.3",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.10.0",
+    "moment": "^2.10.2",
+    "nodegit": "^0.3.3",
+    "request": "^2.55.0",
     "semver": "^4.3.3",
     "systemjs": "^0.16.9",
     "winston": "^1.0.0"
