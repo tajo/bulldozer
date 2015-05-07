@@ -1,6 +1,6 @@
 {
   "name": "bulldozer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Deployment/CI from Bitbucket/Github to your server.",
   "main": "index.js",
   "author": "Vojtech Miksu",
@@ -8,6 +8,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/tajo/bulldozer"
+  },
+  "scripts": {
+    "compile": "babel -d dist/ lib/",
+    "prepublish": "npm run compile"
   },
   "bin": "./index.js",
   "keywords": [
