@@ -2,16 +2,15 @@
 // place it into the root of your project
 // it is used by both sides - server and client
 
-export default {
+var config = {
   // main server address
-  url: 'https://localhost',
+  url: 'https://example.org',
 
-  // bulldozer deployment server port
+  // bulldozer deployment server port (must be different than your app port!)
   port: 8000,
 
   // secures communication between bulldozer's client & server
-  // note that server should be running on HTTPS, otherwise this secret can be sniffed
-  secret: 'YOUR_SECRET_CODE',
+  secret: 'YOUR_SECRET',
 
   // bitbucket or github
   gitUrl: 'github',
@@ -32,8 +31,8 @@ export default {
   // pre-deployment hook
   // put here everything that should be ran before the
   // replacement of source code from Git repository
-  preDeploy: (utils) => {
-    // utils.getLogger() gives you Winston utility
+  preDeploy: function(utils) {
+     // utils.getLogger() gives you Winston utility
     utils.getLogger().info('Pre-deploy started.');
     // good place to run some integration tests
     // if false, the deployment is stopped
@@ -43,26 +42,25 @@ export default {
 
   // post deployment hook
   // put here everything that should be ran with a new source code
-  postDeploy: (utils) => {
+  postDeploy: function(utils) {
     utils.getLogger().info('Post-deploy started.');
 
     // it runs exec(), logs stdout/stderr and returns promise
     utils.run('npm install')
-      .then(() => {
+      .then(function() {
         utils.getLogger().info('Deploy finished.');
         utils.getLogger().info('Starting production server.');
-        return utils.run('PORT=8080 NODE_ENV=production forever stop src/server');
+        return utils.run('PORT=80 NODE_ENV=production forever stop src/server');
       })
       // if there was no server running, forever stop fails, so I'm catching it here...
-      .fail(() => utils.getLogger().info('There was no running instance of production server.'))
+      .fail(function() {return utils.getLogger().info('There was no running instance of production server.'); })
       // start application
-      .then(() => utils.run('PORT=8080 NODE_ENV=production forever start src/server'))
-      .then(() => {
+      .then(function() {return utils.run('PORT=80 NODE_ENV=production forever start src/server'); })
+      .then(function() {
         utils.getLogger().info('Production server started.');
 
         // this is a good place to do something with the output log
         // e.g. you can send it as an email through service like Mailgun or save it as a file
-
         utils.getLoggerOutput(); // << THIS RETURNS THE OUTPUT LOG AS A STRING
 
         // resets the output log, so the next deployment log starts clean
@@ -73,9 +71,11 @@ export default {
   // on error hook
   // this is a good place to do something with the output log
   // e.g. you can send it as an email through service like Mailgun or save it as a file
-  onError: (utils) => {
+  onError: function(utils) {
     utils.getLoggerOutput(); // << THIS RETURNS THE OUTPUT LOG AS A STRING
     utils.resetLoggerOutput();
   }
 
 };
+
+module.exports = config;
