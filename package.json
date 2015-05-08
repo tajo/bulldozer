@@ -1,6 +1,6 @@
 {
   "name": "bulldozer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Deployment/CI from Bitbucket/Github to your server.",
   "main": "index.js",
   "author": "Vojtech Miksu",
